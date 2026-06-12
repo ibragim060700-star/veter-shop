@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Veter Cheat Shop</title>
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        body { margin: 0; padding: 0; padding-top: env(safe-area-inset-top); background: radial-gradient(circle at 50% 0%, #1e0b3d 0%, #000000 70%); background-attachment: fixed; background-color: #000000; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; min-height: 100vh; }
+        .screen { width: 100%; min-height: 100vh; display: none; flex-direction: column; }
+        #main-screen { display: flex; }
+        .header { padding: 20px 16px 5px 16px; text-align: center; display: flex; align-items: center; justify-content: center; position: relative; }
+        .back-btn { position: absolute; left: 16px; font-size: 20px; cursor: pointer; color: #a855f7; z-index: 10; }
+        .header-title { font-size: 24px; font-weight: 900; text-transform: uppercase; background: linear-gradient(90deg, #a855f7 0%, #d8b4fe 50%, #a855f7 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 10px rgba(168, 85, 247, 0.7)); }
+        .header-underline { height: 2px; background: linear-gradient(90deg, rgba(168, 85, 247, 0) 0%, rgba(168, 85, 247, 1) 50%, rgba(168, 85, 247, 0) 100%); margin-top: 10px; width: 100%; }
+        .menu-container { padding: 20px; display: flex; flex-direction: column; gap: 15px; }
+        .menu-btn { background-color: #000000; border: 2px solid #ffffff; border-radius: 14px; padding: 18px 20px; color: #ffffff; font-size: 18px; font-weight: 700; text-transform: uppercase; display: flex; align-items: center; justify-content: space-between; cursor: pointer; transition: all 0.3s ease; box-shadow: 0 0 15px rgba(168, 85, 247, 0.2); }
+        .purple-emoji { filter: invert(44%) sepia(85%) saturate(2250%) hue-rotate(240deg) brightness(100%) contrast(100%); display: inline-block; }
+        .status-box { margin: 0 20px 20px 20px; padding: 20px; border: 2px solid #ffffff; border-radius: 16px; background: rgba(0, 0, 0, 0.4); }
+        .status-title { font-size: 20px; font-weight: 800; text-transform: uppercase; text-align: center; margin-bottom: 5px; }
+        .status-list { display: flex; flex-direction: column; gap: 12px; margin-top: 15px; }
+        .status-item { font-size: 14px; font-weight: 600; display: flex; justify-content: space-between; }
+        #admin-panel { display: none; border-color: #a855f7; }
+        .cat-section { font-size: 18px; font-weight: 800; color: #d8b4fe; margin: 20px 20px 10px 20px; text-transform: uppercase; }
+        .product-card { margin: 0 20px 15px 20px; padding: 18px; border: 2px solid #a855f7; border-radius: 14px; background: rgba(0, 0, 0, 0.5); display: flex; justify-content: space-between; align-items: center; cursor: pointer; font-weight: 700; }
+        .content-box { margin: 15px 20px; padding: 20px; border: 2px solid #a855f7; border-radius: 16px; background: rgba(0, 0, 0, 0.6); }
+        .price-row { display: flex; justify-content: space-between; padding: 15px 0; border-bottom: 1px solid rgba(168, 85, 247, 0.2); cursor: pointer; }
+        .price-row:last-child { border-bottom: none; }
+        .price-row span:last-child { color: #d8b4fe; font-weight: 800; }
+        .order-box { margin: 20px; padding: 20px; border: 2px solid #a855f7; border-radius: 16px; background: #110522; text-align: center; }
+        .buy-btn { background: #a855f7; color: #fff; padding: 18px; border-radius: 14px; font-weight: 800; font-size: 18px; text-transform: uppercase; margin-top: 25px; cursor: pointer; box-shadow: 0 0 15px rgba(168, 85, 247, 0.5); }
+        .hint-text { text-align: center; color: #a855f7; font-weight: 600; font-size: 14px; margin-bottom: 10px; }
+        #secret-area { height: 60px; width: 100%; margin-top: 10px; opacity: 0; }
+        /* Стиль для ввода промокода */
+        #promo-input { width: 100%; padding: 15px; border-radius: 12px; background: #000; border: 2px solid #a855f7; color: white; box-sizing: border-box; text-align: center; font-size: 16px; margin: 15px 0; }
+    </style>
+</head>
+<body>
+    <div id="main-screen" class="screen" style="display: flex;">
+        <div class="header"><div class="header-title">Veter Cheat Shop🔥</div></div>
+        <div class="header-underline"></div>
+        <div class="menu-container">
+            <div class="menu-btn" onclick="showScreen('catalog-screen')"><div>КАТАЛОГ 🛒</div><i class="fas fa-chevron-right" style="color:#a855f7"></i></div>
+            <div class="menu-btn" onclick="showScreen('promo-screen')"><div>ПРОМОКОД 🎁</div><i class="fas fa-chevron-right" style="color:#a855f7"></i></div>
+            <div class="menu-btn" onclick="showScreen('device-screen')"><div>DEVICE MODEL 📱</div><i class="fas fa-chevron-right" style="color:#a855f7"></i></div>
+            <div class="menu-btn" onclick="window.open('https://t.me/VeterMod', '_blank')"><div>ТЕХ.ПОДДЕРЖКА 🛡️</div><i class="fas fa-chevron-right" style="color:#a855f7"></i></div>
+            <div class="menu-btn" onclick="window.open('https://t.me/LebroDLC_Veter', '_blank')"><div>НАШ КАНАЛ 🔥</div><i class="fas fa-chevron-right" style="color:#a855f7"></i></div>
+            <div id="admin-panel" class="menu-btn" style="background: #2e004d;"><div>АДМИН ПАНЕЛЬ ⚙️</div></div>
+        </div>
+        <div class="status-box">
+            <div class="status-title">СТАТУС ЧИТОВ ⚡</div>
+            <div class="header-underline" style="margin-bottom:15px"></div>
+            <div class="status-list">
+                <div class="status-item">Lebro Tools — Обновлен<span>✅</span></div>
+                <div class="status-item">Magic Cheat — Обновлен<span>✅</span></div>
+                <div class="status-item" style="color: #ef4444;">ZXhack — В обновлении<span>❌</span></div>
+                <div class="status-item">Droid Client(PC) — Обновлен<span>✅</span></div>
+                <div class="status-item" style="color: #ef4444;">Salfetka DLC(PC) — В обновлении<span>❌</span></div>
+            </div>
+        </div>
+        <div id="secret-area" onclick="checkSecretClick()"></div>
+    </div>
+
+    <div id="promo-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('main-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">ПРОМОКОД 🎁</div></div>
+        <div class="header-underline"></div>
+        <div class="content-box" style="margin-top: 30px;">
+            <div style="text-align: center; font-weight: 700; margin-bottom: 10px;">Введите промокод:</div>
+            <input type="text" id="promo-input" placeholder="Введите код...">
+            <div class="buy-btn" onclick="checkPromo()">АКТИВИРОВАТЬ</div>
+        </div>
+    </div>
+
+    <div id="catalog-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('main-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">Veter SHOP 🔥</div></div>
+        <div class="header-underline"></div>
+        <div class="cat-section">На телефон 📱</div>
+        <div class="product-card" onclick="showScreen('product-screen')">Lebro Tools ⚡</div>
+        <div class="product-card" onclick="showScreen('magic-screen')">Magic Cheat 🔮</div>
+        <div class="product-card" onclick="showScreen('zxhack-screen')">ZXhack 💻</div>
+        <div class="cat-section" style="margin-top: 10px;">На компьютер</div>
+        <div class="product-card" onclick="showScreen('droid-screen')">Droid Client 🌐</div>
+        <div class="product-card" onclick="showScreen('salfetka-screen')">Salfetka DLC 🔥</div>
+    </div>
+
+    <div id="product-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('catalog-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">LEBRO TOOLS</div></div>
+        <div class="hint-text">Нажмите на товар, чтобы начать оплату ❤️</div>
+        <div class="cat-section">Lebro VIP 🔮</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('Lebro VIP', '1 день', '240₽')"><span>1 день</span> <span>240₽</span></div>
+            <div class="price-row" onclick="openPurchase('Lebro VIP', '7 дней', '590₽')"><span>7 дней</span> <span>590₽</span></div>
+            <div class="price-row" onclick="openPurchase('Lebro VIP', '30 дней', '1200₽')"><span>30 дней</span> <span>1200₽</span></div>
+            <div class="price-row" onclick="openPurchase('Lebro VIP', 'Навсегда', '2300₽')"><span>Навсегда</span> <span>2300₽</span></div>
+        </div>
+        <div class="cat-section">Lebro Lite 🔮</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('Lebro Lite', '1 день', '140₽')"><span>1 день</span> <span>140₽</span></div>
+            <div class="price-row" onclick="openPurchase('Lebro Lite', '7 дней', '390₽')"><span>7 дней</span> <span>390₽</span></div>
+        </div>
+    </div>
+
+    <div id="magic-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('catalog-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">MAGIC CHEAT</div></div>
+        <div class="hint-text">Нажмите на товар, чтобы начать оплату ❤️</div>
+        <div class="cat-section">Magic VIP 🔮</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('Magic VIP', '1 день', '290₽')"><span>1 день</span> <span>290₽</span></div>
+            <div class="price-row" onclick="openPurchase('Magic VIP', '7 дней', '1500₽')"><span>7 дней</span> <span>1500₽</span></div>
+            <div class="price-row" onclick="openPurchase('Magic VIP', '30 дней', '3100₽')"><span>30 дней</span> <span>3100₽</span></div>
+        </div>
+        <div class="cat-section">Magic Lite 🔮</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('Magic Lite', '1 день', '200₽')"><span>1 день</span> <span>200₽</span></div>
+            <div class="price-row" onclick="openPurchase('Magic Lite', '7 дней', '1300₽')"><span>7 дней</span> <span>1300₽</span></div>
+        </div>
+    </div>
+
+    <div id="zxhack-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('catalog-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">ZXHACK CHEAT</div></div>
+        <div class="hint-text">Нажмите на товар, чтобы начать оплату ❤️</div>
+        <div class="cat-section">ZXhack Cheat 🔮</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('ZXhack', '1 день', '130₽')"><span>1 день</span> <span>130₽</span></div>
+            <div class="price-row" onclick="openPurchase('ZXhack', '7 дней', '300₽')"><span>7 дней</span> <span>300₽</span></div>
+            <div class="price-row" onclick="openPurchase('ZXhack', '30 дней', '800₽')"><span>30 дней</span> <span>800₽</span></div>
+            <div class="price-row" onclick="openPurchase('ZXhack', 'Навсегда', '1600₽')"><span>Навсегда</span> <span>1600₽</span></div>
+        </div>
+    </div>
+
+    <div id="salfetka-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('catalog-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">SALFETKA DLC</div></div>
+        <div class="hint-text">Нажмите на товар, чтобы начать оплату ❤️</div>
+        <div class="cat-section">Salfetka DLC 🔥</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('Salfetka DLC', '1 день', '200₽')"><span>1 день</span> <span>200₽</span></div>
+            <div class="price-row" onclick="openPurchase('Salfetka DLC', '7 дней', '430₽')"><span>7 дней</span> <span>430₽</span></div>
+            <div class="price-row" onclick="openPurchase('Salfetka DLC', '30 дней', '900₽')"><span>30 дней</span> <span>900₽</span></div>
+        </div>
+    </div>
+
+    <div id="droid-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('catalog-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">DROID CLIENT</div></div>
+        <div class="hint-text">Нажмите на товар, чтобы начать оплату ❤️</div>
+        <div class="cat-section">Droid Client 🌐</div>
+        <div class="content-box">
+            <div class="price-row" onclick="openPurchase('Droid Client', 'Навсегда', '1000₽')"><span>Навсегда</span> <span>1000₽</span></div>
+        </div>
+    </div>
+
+    <div id="purchase-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('catalog-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">ОПЛАТА 💲</div></div>
+        <div class="order-box">
+            <div id="order-title" style="font-size:24px; font-weight:900;"></div>
+            <div id="order-tariff" style="color:#d8b4fe; font-size:20px; margin:10px 0;"></div>
+            <div id="order-price" style="font-size:40px; font-weight:800; margin:10px 0;"></div>
+            <div class="header-underline" style="margin:20px 0;"></div>
+            <div style="text-align: left; margin: 15px 0;">
+                <div style="font-weight:700; color:#d8b4fe; margin-bottom:5px;">Реквизиты:</div>
+                <div style="margin-bottom:5px;">Номер: <span style="font-weight:600;">+79931702281</span></div>
+                <div>Банк: <span style="font-weight:600;">Т-Банк</span></div>
+            </div>
+            <div class="buy-btn" onclick="confirmPayment()">Я ОПЛАТИЛ ✅</div>
+            <div style="margin-top: 15px; font-size: 13px; color: #a855f7; font-weight: 600;">После оплаты пришлите СКРИНШОТ в личку.</div>
+        </div>
+    </div>
+
+    <div id="device-screen" class="screen">
+        <div class="header"><div class="back-btn" onclick="showScreen('main-screen')"><i class="fas fa-arrow-left"></i></div><div class="header-title">DEVICE MODEL 📱</div></div>
+        <div id="device-data" style="margin:20px; padding:25px; border:2px solid #a855f7; border-radius:16px; background:rgba(0,0,0,0.6); font-family:monospace; line-height:1.6;"></div>
+        <div class="menu-btn" style="margin: 0 20px; justify-content: center;" onclick="generateNewDevice()">СГЕНЕРИРОВАТЬ</div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp; tg.ready(); tg.expand();
+        function showScreen(screenId) { document.querySelectorAll('.screen').forEach(s => s.style.display = 'none'); document.getElementById(screenId).style.display = 'flex'; if(screenId === 'device-screen') generateNewDevice(); }
+        function openPurchase(name, tariff, price) { document.getElementById('order-title').innerText = name; document.getElementById('order-tariff').innerText = tariff; document.getElementById('order-price').innerText = price; showScreen('purchase-screen'); }
+        function confirmPayment() { window.location.href = "https://t.me/VeterMod"; }
+        function checkPromo() { 
+            let code = document.getElementById('promo-input').value; 
+            if (code === "VETER") { alert("Успешно! Промокод принят."); } else { alert("Неверный промокод!"); }
+        }
+        function generateNewDevice() { const m = ["Xiaomi", "Samsung", "Google", "POCO"]; const models = ["24031PN0DG", "SM-G991B", "Pixel 8 Pro", "POCO F6"]; document.getElementById('device-data').innerHTML = `Manufacturer: ${m[Math.floor(Math.random()*m.length)]}<br>Model: ${models[Math.floor(Math.random()*models.length)]}<br>ID: ${Math.random().toString(16).substring(2, 18)}`; }
+        let secretCount = 0; function checkSecretClick() { secretCount++; if (secretCount >= 5) { let pass = prompt("Введите пароль админа:"); if (pass === "asasddff06_ADMIN") { document.getElementById('admin-panel').style.display = 'flex'; secretCount = 0; } else { alert("Неверный пароль"); secretCount = 0; } } }
+    </script>
+</body>
+</html>
